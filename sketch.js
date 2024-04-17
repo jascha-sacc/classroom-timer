@@ -15,6 +15,11 @@ let introText = "Click + drag to set time, release to start the timer.";
 let introSize = null;
 let timeSize = null;
 let intro = true;
+let env;
+let triOsc;
+let reverb;
+
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -23,6 +28,16 @@ function setup() {
   timeSize = width / 4;
   textColor = color(10, 10, 10);
   dotColor = color(250, 250, 250);
+  env = new p5.Envelope(0.01, 0.5, 0.01, 0);
+  triOsc = new p5.Oscillator('sine');
+  triOsc.freq(2000);
+  reverb = new p5.Reverb();
+  reverb.process(triOsc, 5, 5);
+}
+
+function playSound() {
+  triOsc.start();
+  env.play(triOsc);
 }
 
 function draw() {
@@ -92,6 +107,7 @@ function startClock() {
 function clockTick() {
   if (secs <= 0) {
     clearInterval(clock);
+    playSound();
   } else {
     secs = secs - clockTickSeconds;
     let secsRatio = secs / startingSecs;
