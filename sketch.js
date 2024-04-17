@@ -11,44 +11,46 @@ let textColor;
 let dotColor;
 let tail = 15;
 let lineSize = 5;
+let introText = "Click + drag to set time, release to start the timer.";
+let introSize = null;
+let timeSize = null;
+let intro = true;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  lineSize = floor(width/50);
-  textFont("Courier");
-  textSize(width/4);
+  lineSize = floor(width / 50);
+  introSize = width / 32;
+  timeSize = width / 4;
   textColor = color(10, 10, 10);
   dotColor = color(250, 250, 250);
 }
 
 function draw() {
   background("red");
-  drawLine();
-  calculateTextAlpha();
-  displayTime(0, 0, width/6);
-  console.log(points.length);
+  if (intro) {
+    displayIntro();
+  } else {
+    drawLine();
+    calculateTextAlpha();
+    displayTime();
+    console.log(points.length);
+  }
 }
 
 function drawLine() {
-  // if (points.length > 1) {
-    for (let i = 0; i < points.length - 1; i++) {
-      let p = points[i];
-      let p2 = points[i + 1];
-      let distanceFromEnd = points.length - i;
-      let lineAlpha = 255;
-      if(distanceFromEnd < tail) {
-        lineAlpha = map(distanceFromEnd, tail, 0, 240, 0);
-      }
-      dotColor.setAlpha(lineAlpha);
-      stroke(dotColor);
-      strokeWeight(lineSize);
-      line(p.x, p.y, p2.x, p2.y);
+  for (let i = 0; i < points.length - 1; i++) {
+    let p = points[i];
+    let p2 = points[i + 1];
+    let distanceFromEnd = points.length - i;
+    let lineAlpha = 255;
+    if (distanceFromEnd < tail) {
+      lineAlpha = map(distanceFromEnd, tail, 0, 240, 0);
     }
-  // } 
-  // else if (points.length === 1) {
-  //   fill(dotColor);
-  //   ellipse(points[0].x, points[0].y, lineSize);
-  // }
+    dotColor.setAlpha(lineAlpha);
+    stroke(dotColor);
+    strokeWeight(lineSize);
+    line(p.x, p.y, p2.x, p2.y);
+  }
 }
 
 function calculateTextAlpha() {
@@ -65,11 +67,21 @@ function calculateTextAlpha() {
   textColor.setAlpha(textAlpha);
 }
 
+function displayIntro() {
+  textFont("Times");
+  fill(textColor);
+  textSize(introSize);
+  textAlign(CENTER, CENTER);
+  text(introText, 0, 0, width, height);
+}
+
 function displayTime(x, y, size) {
+  textFont("Courier");
+  textSize(width / 4);
   noStroke();
   fill(textColor);
   textAlign(CENTER, CENTER);
-  text(timeText, x, y, width - x, height - y);
+  text(timeText, 0, 0, width, height);
 }
 
 function startClock() {
@@ -93,6 +105,7 @@ function clockTick() {
 }
 
 function mousePressed() {
+  intro = false;
   secs = 0;
   points = [];
 }
