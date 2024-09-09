@@ -77,7 +77,7 @@ function calculateTextAlpha() {
       textAlpha += floor(mouseMovement / 3);
     }
     textAlpha--;
-    textAlpha = constrain(textAlpha, 0, 255);
+    textAlpha = constrain(textAlpha, 128, 255);
   }
   textColor.setAlpha(textAlpha);
 }
