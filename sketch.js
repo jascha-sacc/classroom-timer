@@ -107,7 +107,7 @@ function startClock() {
 function clockTick() {
   if (secs <= 0) {
     clearInterval(clock);
-    playSound();
+    setInterval(playSound, 1500);
   } else {
     secs = secs - clockTickSeconds;
     let secsRatio = secs / startingSecs;
